@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_KEY = { KEY };
-axios.defaults.baseURL = "https://unsplash.com/developers/";
+const API_KEY = "";
+axios.defaults.baseURL = "https://api.unsplash.com/";
 axios.defaults.headers.common["Authorization"] = `Client-ID ${API_KEY}`;
 
 export const fetchImagesWithTopic = async (query, page = 1) => {
