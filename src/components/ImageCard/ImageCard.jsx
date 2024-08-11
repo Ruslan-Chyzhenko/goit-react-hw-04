@@ -5,7 +5,7 @@ export const ImageCard = ({ src, alt, avgColor, openModal }) => {
   return (
     <GridItem>
       <div
-        className={style.thumb}
+        className={css.thumb}
         style={{
           backgroundColor: avgColor,
           borderColor: avgColor,

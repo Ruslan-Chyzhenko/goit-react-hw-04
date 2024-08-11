@@ -1,49 +1,39 @@
 import css from "./SearchBar.module.css";
+import { FiSearch } from "react-icons/fi";
 
-export default SearchBar = ({ onSabmit }) => {
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const form = evt.target;
-    const topic = form.elements.topic.value;
+export default SearchBar = ({ onSubmit }) => {
+  const [query, setQuery] = useState("");
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+  };
 
-    // Якщо текстове поле порожнє, виводимо повідомлення
-    // і припиняємо виконання функції.
-    if (form.elements.topic.value.trim() === "") {
-      alert("Please enter search term!");
-      return;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!query.trim()) {
+      return alert("please enter");
     }
-
-    // У протилежному випадку викликаємо пропс
-    // і передаємо йому значення поля
-    onSabmit(topic);
-    form.reset();
+    onSubmit(query);
+    setQuery("");
   };
 
   return (
     <header>
-      <form onSubmit={handleSubmit}>
+      <form className={css.form} onSubmit={handleSubmit}>
         <input
           type="text"
           autocomplete="off"
           autofocus
           placeholder="Search images and photos"
+          onChange={handleChange}
+          value={query}
+          className={css.input}
+          name="search"
+          required
         />
-        <button type="submit">Search</button>
+        <button className={css.button} type="submit">
+          <FiSearch size="16px" />
+        </button>
       </form>
     </header>
   );
 };
-
-// export default function SearchBox({ value, onFilter }) {
-//   return (
-//     <div className={css.searchBoxContainer}>
-//       <p className={css.labelSearch}>Find contacts by name</p>
-//       <input
-//         type="text"
-//         className={css.searchInput}
-//         value={value}
-//         onChange={(e) => onFilter(e.target.value)}
-//       />
-//     </div>
-//   );
-// }

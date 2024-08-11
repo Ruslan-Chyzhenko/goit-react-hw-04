@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { fetchArticlesWithTopic } from "../articles-api";
+import { fetchArticlesWithTopic } from "../../apiService/articles-api";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import initialTasks from "../tasks.json";
-import ImageCard from "../ImageCard/ImageCard";
 import ImageGallery from "../ImageGallery/ImageGallery";
 import ImageModal from "../ImageModal/ImageModal";
 import Loader from "../Loader/Loader";
@@ -17,8 +15,6 @@ export default function App() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  // const [tasks, setTasks] = useState(initialTasks);
-  // const [filter, setFilter] = useState("");
 
   const handleSearch = async (topic) => {
     try {
@@ -51,32 +47,32 @@ export default function App() {
     fetchArticles();
   }, []);
 
-  // loading Contacts from the LocalStorage
-  useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem("contacts")) || [];
-    setTasks(savedTasks);
-  }, []);
+  // // loading Contacts from the LocalStorage
+  // useEffect(() => {
+  //   const savedTasks = JSON.parse(localStorage.getItem("contacts")) || [];
+  //   setTasks(savedTasks);
+  // }, []);
 
-  // saved Contacts in the LocalStorage
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(tasks));
-  }, [tasks]);
+  // // saved Contacts in the LocalStorage
+  // useEffect(() => {
+  //   localStorage.setItem("contacts", JSON.stringify(tasks));
+  // }, [tasks]);
 
-  const addTask = (newTask) => {
-    setTasks((prevTasks) => {
-      return [...prevTasks, newTask];
-    });
-  };
+  // const addTask = (newTask) => {
+  //   setTasks((prevTasks) => {
+  //     return [...prevTasks, newTask];
+  //   });
+  // };
 
-  const deleteTask = (taskId) => {
-    setTasks((prevTasks) => {
-      return prevTasks.filter((task) => task.id !== taskId);
-    });
-  };
+  // const deleteTask = (taskId) => {
+  //   setTasks((prevTasks) => {
+  //     return prevTasks.filter((task) => task.id !== taskId);
+  //   });
+  // };
 
-  const visibleTasks = tasks.filter((task) =>
-    task.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  // const visibleTasks = tasks.filter((task) =>
+  //   task.name.toLowerCase().includes(filter.toLowerCase())
+  // );
 
   return (
     <div className={css.container}>

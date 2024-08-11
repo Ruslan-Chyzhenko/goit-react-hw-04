@@ -1,4 +1,4 @@
-import style from "./Grid.module.css";
+import css from "./Grid.module.css";
 export const Grid = ({ children }) => {
-  return <ul className={style.list}>{children}</ul>;
+  return <ul className={css.list}>{children}</ul>;
 };
