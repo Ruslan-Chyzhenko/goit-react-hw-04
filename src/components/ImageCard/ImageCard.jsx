@@ -1,4 +1,4 @@
-import css from "./Contact.module.css";
+import css from "./ImageCard.module.css";
 import { HiUser } from "react-icons/hi";
 import { BsFillTelephoneFill } from "react-icons/bs";
 

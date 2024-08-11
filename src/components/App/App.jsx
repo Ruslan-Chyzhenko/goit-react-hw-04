@@ -1,13 +1,52 @@
 import { useState, useEffect } from "react";
-import ContactList from "../ContactList/ContactList";
+import { fetchArticlesWithTopic } from "../articles-api";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import initialTasks from "../tasks.json";
-import ContactForm from "../ContactForm/ContactForm";
-import SearchBox from "../SearchBox/SearchBox";
+import ImageCard from "../ImageCard/ImageCard";
+import ImageGallery from "../ImageGallery/ImageGallery";
+import ImageModal from "../ImageModal/ImageModal";
+import Loader from "../Loader/Loader";
+import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
+import SearchBar from "../SearchBar/SearchBar";
 import css from "../App/App.module.css";
 
 export default function App() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [filter, setFilter] = useState("");
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  // const [tasks, setTasks] = useState(initialTasks);
+  // const [filter, setFilter] = useState("");
+
+  const handleSearch = async (topic) => {
+    try {
+      setArticles([]);
+      setError(false);
+      setLoading(true);
+      const data = await fetchArticlesWithTopic(topic);
+      setArticles(data);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        setLoading(true);
+        // 2. Використовуємо HTTP-функцію
+        const data = await fetchArticlesWithTopic("react");
+        setArticles(data);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchArticles();
+  }, []);
 
   // loading Contacts from the LocalStorage
   useEffect(() => {
@@ -38,10 +77,18 @@ export default function App() {
 
   return (
     <div className={css.container}>
-      <h1>PhoneBook</h1>
-      <ContactForm onAdd={addTask} />
-      <SearchBox value={filter} onFilter={setFilter} />
-      <ContactList tasks={visibleTasks} onDelete={deleteTask} />
+      <h1>Gallery</h1>
+      <LoadMoreBtn />
+      <SearchBar onSearch={handleSearch} />
+      {loading && <Loader />}
+      {error && <Error />}
+      {articles.length > 0 && <ImageGallery items={images} />}
+      {/* <ContactForm onAdd={addTask} /> */}
+      {/* <SearchBox value={filter} onFilter={setFilter} /> */}
+      <ImageGallery tasks={visibleTasks} onDelete={deleteTask} />
+      <Loader />
+      <ErrorMessage />
+      <ImageModal />
     </div>
   );
 }

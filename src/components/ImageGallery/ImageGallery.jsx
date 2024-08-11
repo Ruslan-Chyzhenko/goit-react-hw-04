@@ -1,12 +1,12 @@
-import Contact from "../Contact/Contact";
-import css from "./ContactList.module.css";
+import ImageCard from "../ImageCard/ImageCard";
+import css from "./ImageGallery.module.css";
 
-export default function ContactList({ tasks, onDelete }) {
+export default function ImageGallery({ tasks, onDelete }) {
   return (
     <div className={css.gridContainer}>
       {tasks.map((task) => (
         <li className={css.item} key={task.id}>
-          <Contact data={task} onDelete={onDelete} />
+          <ImageCard data={task} onDelete={onDelete} />
         </li>
       ))}
     </div>
