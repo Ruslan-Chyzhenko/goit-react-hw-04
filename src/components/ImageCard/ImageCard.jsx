@@ -1,21 +1,22 @@
+import { GridItem } from "..";
 import css from "./ImageCard.module.css";
-import { HiUser } from "react-icons/hi";
-import { BsFillTelephoneFill } from "react-icons/bs";
 
-export default function Contact({ data: { id, name, number }, onDelete }) {
+export const ImageCard = ({ src, alt, avgColor, openModal }) => {
   return (
-    <div className={css.container}>
-      <div className={css.info}>
-        <p className={css.name}>
-          <HiUser className={css.icon} /> {name}
-        </p>
-        <p className={css.number}>
-          <BsFillTelephoneFill className={css.icon} /> {number}
-        </p>
+    <GridItem>
+      <div
+        className={style.thumb}
+        style={{
+          backgroundColor: avgColor,
+          borderColor: avgColor,
+        }}
+      >
+        <img
+          src={src.large}
+          alt={alt}
+          onClick={() => openModal(src.large, alt)}
+        />
       </div>
-      <button className={css.btn} onClick={() => onDelete(id)}>
-        Delete
-      </button>
-    </div>
+    </GridItem>
   );
-}
+};

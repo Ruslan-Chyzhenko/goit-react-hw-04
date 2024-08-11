@@ -1,14 +1,19 @@
 import ImageCard from "../ImageCard/ImageCard";
+import { Grid, ImageCard } from "..";
 import css from "./ImageGallery.module.css";
 
-export default function ImageGallery({ tasks, onDelete }) {
+export const ImageGallery = ({ images, openModal }) => {
   return (
-    <div className={css.gridContainer}>
-      {tasks.map((task) => (
-        <li className={css.item} key={task.id}>
-          <ImageCard data={task} onDelete={onDelete} />
-        </li>
+    <Grid className={css.gridContainer}>
+      {images.map(({ id, src, alt, avg_color }) => (
+        <ImageCard
+          key={id}
+          src={src}
+          alt={alt}
+          avgColor={avg_color}
+          openModal={openModal}
+        />
       ))}
-    </div>
+    </Grid>
   );
-}
+};

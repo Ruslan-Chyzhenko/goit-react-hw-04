@@ -8,7 +8,10 @@ import ImageModal from "../ImageModal/ImageModal";
 import Loader from "../Loader/Loader";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import SearchBar from "../SearchBar/SearchBar";
+import toast, { Toaster } from "react-hot-toast";
 import css from "../App/App.module.css";
+
+const notify = () => toast("Here is your toast.");
 
 export default function App() {
   const [articles, setArticles] = useState([]);
@@ -89,6 +92,8 @@ export default function App() {
       <Loader />
       <ErrorMessage />
       <ImageModal />
+      <button onClick={notify}>Make me a toast</button>
+      <Toaster />
     </div>
   );
 }
