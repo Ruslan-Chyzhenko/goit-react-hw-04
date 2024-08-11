@@ -1,8 +1,9 @@
 import { Audio } from "react-loader-spinner";
+import css from "./Loader.module.css";
 
-export default Loader = () => {
+const Loader = () => {
   return (
-    <div>
+    <div className={css.loaderContainer}>
       <Audio
         height="80"
         width="80"
@@ -16,3 +17,5 @@ export default Loader = () => {
     </div>
   );
 };
+
+export default Loader;

@@ -1,9 +1,8 @@
-import { GridItem } from "..";
 import css from "./ImageCard.module.css";
 
-export const ImageCard = ({ src, alt, avgColor, openModal }) => {
+const ImageCard = ({ src, alt, avgColor, openModal, imageData }) => {
   return (
-    <GridItem>
+    <li className={css.gridItem}>
       <div
         className={css.thumb}
         style={{
@@ -12,11 +11,14 @@ export const ImageCard = ({ src, alt, avgColor, openModal }) => {
         }}
       >
         <img
-          src={src.large}
+          src={src}
           alt={alt}
-          onClick={() => openModal(src.large, alt)}
+          onClick={() => openModal(imageData)}
+          className={css.image}
         />
       </div>
-    </GridItem>
+    </li>
   );
 };
+
+export default ImageCard;

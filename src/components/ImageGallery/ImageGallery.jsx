@@ -1,19 +1,21 @@
 import ImageCard from "../ImageCard/ImageCard";
-import { Grid, ImageCard } from "..";
 import css from "./ImageGallery.module.css";
 
-export const ImageGallery = ({ images, openModal }) => {
+const ImageGallery = ({ images, openModal }) => {
   return (
-    <Grid className={css.gridContainer}>
-      {images.map(({ id, src, alt, avg_color }) => (
+    <ul className={css.gridContainer}>
+      {images.map(({ id, urls, alt_description, avg_color, image }) => (
         <ImageCard
           key={id}
-          src={src}
-          alt={alt}
+          src={urls.small}
+          alt={alt_description}
           avgColor={avg_color}
           openModal={openModal}
+          imageData={image}
         />
       ))}
-    </Grid>
+    </ul>
   );
 };
+
+export default ImageGallery;

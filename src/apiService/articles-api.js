@@ -1,22 +1,17 @@
 import axios from "axios";
 
-// axios.defaults.baseURL = "https://hn.algolia.com/api/v1";
-
-// export const fetchArticlesWithTopic = async (topic) => {
-//   const response = await axios.get(`/search?query=${topic}`);
-//   return response.data.hits;
-// };
-
-const API_KEY = "563492ad6f9170000100000108dc2880626e4436b3634ce1cf6b4d74";
+const API_KEY = { KEY };
 axios.defaults.baseURL = "https://unsplash.com/developers/";
-axios.defaults.headers.common["Authorization"] = API_KEY;
-axios.defaults.params = {
-  orientation: "landscape",
-  per_page: 15,
-};
+axios.defaults.headers.common["Authorization"] = `Client-ID ${API_KEY}`;
 
-export const getPhotos = async (query, page) => {
-  const { data } = await axios.get(`search?query=${query}&page=${page}`);
-
+export const fetchImagesWithTopic = async (query, page = 1) => {
+  const { data } = await axios.get(`search/photos`, {
+    params: {
+      query,
+      page,
+      per_page: 15,
+      orientation: "landscape",
+    },
+  });
   return data;
 };

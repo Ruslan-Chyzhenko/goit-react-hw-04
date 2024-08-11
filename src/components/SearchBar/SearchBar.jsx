@@ -1,8 +1,9 @@
 import css from "./SearchBar.module.css";
 import { FiSearch } from "react-icons/fi";
 
-export default SearchBar = ({ onSubmit }) => {
+export default function SearchBar({ onSubmit }) {
   const [query, setQuery] = useState("");
+
   const handleChange = (e) => {
     setQuery(e.target.value);
   };
@@ -10,7 +11,7 @@ export default SearchBar = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!query.trim()) {
-      return alert("please enter");
+      return toast.error("Please enter a search query!");
     }
     onSubmit(query);
     setQuery("");
@@ -21,8 +22,8 @@ export default SearchBar = ({ onSubmit }) => {
       <form className={css.form} onSubmit={handleSubmit}>
         <input
           type="text"
-          autocomplete="off"
-          autofocus
+          autoComplete="off"
+          autoFocus
           placeholder="Search images and photos"
           onChange={handleChange}
           value={query}
@@ -36,4 +37,4 @@ export default SearchBar = ({ onSubmit }) => {
       </form>
     </header>
   );
-};
+}

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { fetchArticlesWithTopic } from "../../apiService/articles-api";
+import { fetchImagesWithTopic } from "../../apiService/articles-api";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import ImageGallery from "../ImageGallery/ImageGallery";
-import ImageModal from "../ImageModal/ImageModal";
 import Loader from "../Loader/Loader";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import SearchBar from "../SearchBar/SearchBar";
@@ -12,17 +11,39 @@ import css from "../App/App.module.css";
 const notify = () => toast("Here is your toast.");
 
 export default function App() {
-  const [articles, setArticles] = useState([]);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSearch = async (topic) => {
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        setLoading(true);
+        const data = await fetchImagesWithTopic("react", 1);
+        setImages(data.results);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchImages();
+  }, []);
+
+  const handleSearch = async (query) => {
+    setSearchQuery(query);
+    setPage(1);
     try {
-      setArticles([]);
+      setImages([]);
       setError(false);
       setLoading(true);
-      const data = await fetchArticlesWithTopic(topic);
-      setArticles(data);
+      const data = await fetchImagesWithTopic(query, 1);
+      setImages(data.results);
     } catch (error) {
       setError(true);
     } finally {
@@ -31,12 +52,13 @@ export default function App() {
   };
 
   useEffect(() => {
-    async function fetchArticles() {
+    if (page === 1) return;
+
+    async function fetchMoreImages() {
       try {
         setLoading(true);
-        // 2. Використовуємо HTTP-функцію
-        const data = await fetchArticlesWithTopic("react");
-        setArticles(data);
+        const data = await fetchImagesWithTopic(searchQuery, page);
+        setImages((prevImages) => [...prevImages, ...data.results]);
       } catch (error) {
         setError(true);
       } finally {
@@ -44,50 +66,38 @@ export default function App() {
       }
     }
 
-    fetchArticles();
-  }, []);
+    fetchMoreImages();
+  }, [page, searchQuery]);
 
-  // // loading Contacts from the LocalStorage
-  // useEffect(() => {
-  //   const savedTasks = JSON.parse(localStorage.getItem("contacts")) || [];
-  //   setTasks(savedTasks);
-  // }, []);
+  const loadMoreImages = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
-  // // saved Contacts in the LocalStorage
-  // useEffect(() => {
-  //   localStorage.setItem("contacts", JSON.stringify(tasks));
-  // }, [tasks]);
+  const openModal = (imageData) => {
+    setSelectedImage(imageData);
+    setIsModalOpen(true);
+  };
 
-  // const addTask = (newTask) => {
-  //   setTasks((prevTasks) => {
-  //     return [...prevTasks, newTask];
-  //   });
-  // };
-
-  // const deleteTask = (taskId) => {
-  //   setTasks((prevTasks) => {
-  //     return prevTasks.filter((task) => task.id !== taskId);
-  //   });
-  // };
-
-  // const visibleTasks = tasks.filter((task) =>
-  //   task.name.toLowerCase().includes(filter.toLowerCase())
-  // );
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
 
   return (
     <div className={css.container}>
       <h1>Gallery</h1>
-      <LoadMoreBtn />
       <SearchBar onSearch={handleSearch} />
       {loading && <Loader />}
-      {error && <Error />}
-      {articles.length > 0 && <ImageGallery items={images} />}
-      {/* <ContactForm onAdd={addTask} /> */}
-      {/* <SearchBox value={filter} onFilter={setFilter} /> */}
-      <ImageGallery tasks={visibleTasks} onDelete={deleteTask} />
-      <Loader />
-      <ErrorMessage />
-      <ImageModal />
+      {error && <ErrorMessage />}
+      {images.length > 0 && (
+        <ImageGallery images={images} openModal={openModal} />
+      )}
+      {images.length > 0 && <LoadMoreBtn onClick={loadMoreImages} />}
+      <ImageModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        imageData={selectedImage}
+      />
       <button onClick={notify}>Make me a toast</button>
       <Toaster />
     </div>
