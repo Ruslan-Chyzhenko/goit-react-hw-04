@@ -7,67 +7,46 @@ import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import SearchBar from "../SearchBar/SearchBar";
 import toast, { Toaster } from "react-hot-toast";
 import css from "../App/App.module.css";
+import ImageModal from "../ImageModal/ImageModal";
 
 const notify = () => toast("Here is your toast.");
 
 export default function App() {
+  let subtitle;
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showBtn, setShowBtn] = useState(false);
 
   useEffect(() => {
-    async function fetchImages() {
-      try {
-        setLoading(true);
-        const data = await fetchImagesWithTopic("react", 1);
-        setImages(data.results);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
+    if (!searchQuery) return;
 
-    fetchImages();
-  }, []);
-
-  const handleSearch = async (query) => {
-    setSearchQuery(query);
-    setPage(1);
-    try {
-      setImages([]);
-      setError(false);
-      setLoading(true);
-      const data = await fetchImagesWithTopic(query, 1);
-      setImages(data.results);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (page === 1) return;
-
-    async function fetchMoreImages() {
+    const fetchImages = async () => {
       try {
         setLoading(true);
         const data = await fetchImagesWithTopic(searchQuery, page);
-        setImages((prevImages) => [...prevImages, ...data.results]);
+        setImages((prevImages) => {
+          return page === 1 ? data.results : [...prevImages, ...data.results];
+        });
+        setShowBtn(data.total_pages && data.total_pages !== page);
       } catch (error) {
         setError(true);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    fetchMoreImages();
-  }, [page, searchQuery]);
+    fetchImages();
+  }, [searchQuery, page]);
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setPage(1);
+  };
 
   const loadMoreImages = () => {
     setPage((prevPage) => prevPage + 1);
@@ -75,26 +54,34 @@ export default function App() {
 
   const openModal = (imageData) => {
     setSelectedImage(imageData);
-    setIsModalOpen(true);
+    setIsOpen(true);
   };
 
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f00";
+  }
+
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsOpen(false);
     setSelectedImage(null);
   };
 
   return (
-    <div className={css.container}>
-      <h1>Gallery</h1>
+    <div className={css.appContainer}>
+      <h1 className={css.mainTitle}>Gallery</h1>
       <SearchBar onSearch={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
       {images.length > 0 && (
         <ImageGallery images={images} openModal={openModal} />
       )}
-      {images.length > 0 && <LoadMoreBtn onClick={loadMoreImages} />}
+      {showBtn && (
+        <LoadMoreBtn onClick={loadMoreImages} className={css.loadMoreBtn} />
+      )}
       <ImageModal
-        isOpen={isModalOpen}
+        isOpen={isOpen}
+        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         imageData={selectedImage}
       />

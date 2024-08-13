@@ -1,17 +1,28 @@
 .container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+  flex-direction: column;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;
   width: 250px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.image:hover {
+  transform: scale(1.05);
 }
 
 .info {
   display: flex;
   flex-direction: column;
+  padding: 10px;
 }
 
 .name,
@@ -21,18 +32,4 @@
 
 .icon {
   margin-right: 5px;
-}
-
-.btn {
-  padding: 5px 10px;
-  border-color: gray;
-  background-color: gray;
-  background-color: #ccc;
-  color: black;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #0056b3;
 }

@@ -1,4 +1,5 @@
 import Modal from "react-modal";
+import css from "./ImageModal.module.css";
 
 const customStyles = {
   content: {
@@ -16,30 +17,44 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-const ImageModal = ({ modalIsOpen, closeModal, imageData }) => {
+const ImageModal = ({ isOpen, closeModal, imageData }) => {
   if (!imageData) return null;
 
-  const { urls, alt_description, user, likes, description } = imageData;
+  const {
+    urls = {},
+    alt_description = "",
+    user = {},
+    likes = 0,
+    description = "",
+  } = imageData;
 
   return (
     <Modal
-      isOpen={modalIsOpen}
+      isOpen={isOpen}
       onRequestClose={closeModal}
-      style={customStyles}
+      className={css.modal}
       overlayClassName={css.overlay}
       contentLabel="Image Modal"
     >
-      <img src={urls.regular} alt={alt_description} className={css.image} />
+      <img
+        src={urls.regular || ""}
+        alt={description || alt_description}
+        className={css.image}
+      />
       <div className={css.details}>
         <h2>{description || alt_description}</h2>
-        <p>Autor: {user.name}</p>
+        <p>Autor: {user.name || "Unknown"}</p>
         <p>Likes: {likes}</p>
         {user.bio && <p>About: {user.bio}</p>}
-        <a href={user.links.html} target="_blank" rel="noopener noreferrer">
+        <a
+          href={user.links?.html || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           The Autor's Profile
         </a>
       </div>
-      <button onClick={onRequestClose} className={css.closeBtn}>
+      <button onClick={closeModal} className={css.closeBtn}>
         Close
       </button>
     </Modal>

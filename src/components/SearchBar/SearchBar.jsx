@@ -1,7 +1,8 @@
 import css from "./SearchBar.module.css";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
-export default function SearchBar({ onSubmit }) {
+export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
 
   const handleChange = (e) => {
@@ -13,7 +14,7 @@ export default function SearchBar({ onSubmit }) {
     if (!query.trim()) {
       return toast.error("Please enter a search query!");
     }
-    onSubmit(query);
+    onSearch(query);
     setQuery("");
   };
 
