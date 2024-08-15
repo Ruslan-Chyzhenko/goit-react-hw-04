@@ -31,9 +31,11 @@ const ImageModal = ({ isOpen, closeModal, imageData }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={closeModal}
+      closeModal={closeModal}
       className={css.modal}
+      style={customStyles}
       overlayClassName={css.overlay}
+      onRequestClose={closeModal}
       contentLabel="Image Modal"
     >
       <img

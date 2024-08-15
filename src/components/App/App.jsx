@@ -82,7 +82,7 @@ export default function App() {
       <ImageModal
         isOpen={isOpen}
         onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
+        closeModal={closeModal}
         imageData={selectedImage}
       />
       <button onClick={notify}>Make me a toast</button>
