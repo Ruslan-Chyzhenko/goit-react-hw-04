@@ -31,7 +31,6 @@ const ImageModal = ({ isOpen, closeModal, imageData }) => {
   return (
     <Modal
       isOpen={isOpen}
-      closeModal={closeModal}
       className={css.modal}
       style={customStyles}
       overlayClassName={css.overlay}
